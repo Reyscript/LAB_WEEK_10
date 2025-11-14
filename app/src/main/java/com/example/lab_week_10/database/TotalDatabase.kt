@@ -5,7 +5,27 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
 
-@Database(entities = [Total::class], version = 1)
+@Database(entities = [Total::class], version = 3, exportSchema = false)
 abstract class TotalDatabase : RoomDatabase() {
     abstract fun totalDao(): TotalDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: TotalDatabase? = null
+
+        fun getDatabase(context: Context): TotalDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    TotalDatabase::class.java,
+                    "total_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
 }

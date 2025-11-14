@@ -1,7 +1,6 @@
 package com.example.lab_week_10.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -15,9 +14,6 @@ interface TotalDao {
     @Update
     fun update(total: Total)
 
-    @Delete
-    fun delete(total: Total)
-
     @Query("SELECT * FROM total WHERE id = :id")
-    fun getTotal(id: Long): List<Total>
+    fun getTotal(id: Long): Total?
 }
